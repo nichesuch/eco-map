@@ -33,11 +33,21 @@ function MapPage() {
       console.log(value);
       const marker = {
         position: [value.lat, value.long],
-        color: colors[value.val],
+        color: value.val ? colors[value.val] : "black",
         size: 10,
-        popup: (<>{value.type}:{value.val}</>)
+        popup: (<>
+          {value.img ? (
+            <img src={value.img} alt={JSON.stringify(value.type)}></img>
+          ) : <></>}
+          {value.type ? (
+            <pre>{JSON.stringify(value.type)}</pre>
+          ) : <></>}
+          {value.val ? (
+            <p>{value.val}</p>
+          ) : <></>}
+        </>)
       } as ColorMarkerProps;
-      setMarkers((markers) => [...markers, marker]);
+      setMarkers((markers) => [...markers, marker]);  
     });
   };
   const clearData = function () {
