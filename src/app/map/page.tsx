@@ -1,13 +1,12 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react";
-import { Marker, Popup } from "react-leaflet";
-import * as L from "leaflet";
 import colormap from "colormap";
-import Map from "@/components/Map";
 import InputFile from "@/components/InputFile";
 import InputAPI from "@/components/InputAPI";
 import { Data } from "@/components/Data";
+import dynamic from "next/dynamic";
+import { ColorMarkerProps } from "@/components/Map";
 
 const colors = colormap({
   colormap: 'RdBu',
@@ -15,15 +14,6 @@ const colors = colormap({
   format: 'hex',
   alpha: 1
 })
-
-function ColorIcon(type: string, val: number, size: number = 10) {
-  return L.divIcon({
-    html:
-      '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="100" fill="' + colors[val] + '" /></svg>',
-    className: 'color marker',
-    iconSize: [size, size]
-  })
-}
 
 function ColorBar(canvas: HTMLCanvasElement, colors: string[], height: number, width: number) {
   const c = canvas.getContext('2d');
@@ -37,15 +27,18 @@ function ColorBar(canvas: HTMLCanvasElement, colors: string[], height: number, w
 }
 
 function MapPage() {
-  const [markers, setMarkers] = useState<React.ReactNode[]>([]);
+  const [markers, setMarkers] = useState<ColorMarkerProps[]>([]);
   const addData = function (data: Array<Data>) {
-    const tmp = data.map((value, index) => {
+    data.map((value, index) => {
       console.log(value);
-      return <Marker key={index} position={[value.lat, value.long]} icon={ColorIcon(value.type, value.val)}>
-        <Popup>{value.type}:{value.val}</Popup>
-      </Marker>;
+      const marker = {
+        position: [value.lat, value.long],
+        color: colors[value.val],
+        size: 10,
+        popup: (<>{value.type}:{value.val}</>)
+      } as ColorMarkerProps;
+      setMarkers((markers) => [...markers, marker]);
     });
-    setMarkers((markers) => [...markers, tmp]);
   };
   const clearData = function () {
     setMarkers([]);
@@ -57,6 +50,15 @@ function MapPage() {
       ColorBar(ref.current, colors, 40, ref.current.width);
     }
   }, [ref]);
+
+  const Map = React.useMemo(
+    () =>
+      dynamic(() => import("@/components/Map"), {
+        loading: () => <p>A map is loading</p>,
+        ssr: false,
+      }),
+    []
+  );
 
   return <main className="container mx-auto">
     <div className="flex flex-col p-2">
@@ -74,8 +76,7 @@ function MapPage() {
       <canvas ref={ref} id="colorBar" className="w-full h-[40px]" />
     </div>
     <div className="h-[80vh]">
-      <Map center={[35.454954, 139.6313859]} zoom={16} >
-        {markers}
+      <Map center={[35.454954, 139.6313859]} zoom={16} markers={markers} >
       </Map>
     </div>
   </main>

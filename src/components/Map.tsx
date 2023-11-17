@@ -1,26 +1,35 @@
 "use client"
 
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
-
-import L from "leaflet";
+import L, { LatLngExpression, divIcon } from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
+//delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon.src,
   iconRetinaUrl: markerIcon2x.src,
   shadowUrl: markerShadow.src,
 });
 
+type ColorMarkerProps = {
+  position: LatLngExpression;
+  color: string;
+  size?: number;
+  popup?: React.ReactNode;
+}
+
 type MapProps = {
-  center: [number, number];
+  center: LatLngExpression;
   zoom: number;
+  markers?: ColorMarkerProps[];
   children: React.ReactNode;
 }
 
 const Map = (props: MapProps) => {
+
   return (
     <MapContainer
       center={props.center}
@@ -44,8 +53,29 @@ const Map = (props: MapProps) => {
           ランドマークタワー
         </Popup>
       </Marker>
+      {props.markers?.map((mark, index) => {
+        return (
+          <Marker key={"color-marker-" + index} position={mark.position} icon={divIcon({
+            html: `
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="100" fill=${mark.color} /></svg>
+              `,
+            iconSize: [mark.size ?? 10, mark.size ?? 10],
+            className: "color-marker"
+          })}>
+            {
+              mark.popup ? (
+                <Popup>
+                  {mark.popup!}
+                </Popup>
+              ) : (<></>)
+            }
+          </Marker>
+        )
+      }
+      )}
     </MapContainer>
   );
 };
 
 export default Map;
+export type { ColorMarkerProps };
