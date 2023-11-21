@@ -21,10 +21,17 @@ type ColorMarkerProps = {
   popup?: React.ReactNode;
 }
 
+type ImageMarkerProps = {
+  position: LatLngExpression;
+  html: string | HTMLElement;
+  size?: number;
+  popup?: React.ReactNode;
+}
+
 type MapProps = {
   center: LatLngExpression;
   zoom: number;
-  markers?: ColorMarkerProps[];
+  markers?: Array<ColorMarkerProps | ImageMarkerProps>;
   children: React.ReactNode;
 }
 
@@ -54,23 +61,41 @@ const Map = (props: MapProps) => {
         </Popup>
       </Marker>
       {props.markers?.map((mark, index) => {
-        return (
-          <Marker key={"color-marker-" + index} position={mark.position} icon={divIcon({
-            html: `
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="100" fill=${mark.color} /></svg>
-              `,
-            iconSize: [mark.size ?? 10, mark.size ?? 10],
-            className: "color-marker"
-          })}>
-            {
-              mark.popup ? (
-                <Popup>
-                  {mark.popup!}
-                </Popup>
-              ) : (<></>)
-            }
-          </Marker>
-        )
+        if ('color' in mark) {
+          return (
+            <Marker key={"color-marker-" + index} position={mark.position} icon={divIcon({
+              html: `
+                  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="100" fill=${mark.color} /></svg>
+                `,
+              iconSize: [mark.size ?? 10, mark.size ?? 10],
+              className: "color-marker"
+            })}>
+              {
+                mark.popup ? (
+                  <Popup>
+                    {mark.popup!}
+                  </Popup>
+                ) : (<></>)
+              }
+            </Marker>
+          )
+        } else if ('html' in mark) {
+          return (
+            <Marker key={"color-marker-" + index} position={mark.position} icon={divIcon({
+              html: mark.html,
+              iconSize: [mark.size ?? 100, mark.size ?? 100],
+              className: "image-marker"
+            })}>
+              {
+                mark.popup ? (
+                  <Popup>
+                    {mark.popup!}
+                  </Popup>
+                ) : (<></>)
+              }
+            </Marker>
+          )
+        }
       }
       )}
     </MapContainer>
@@ -78,4 +103,4 @@ const Map = (props: MapProps) => {
 };
 
 export default Map;
-export type { ColorMarkerProps };
+export type { ColorMarkerProps, ImageMarkerProps };

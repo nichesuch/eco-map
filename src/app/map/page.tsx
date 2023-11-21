@@ -6,7 +6,8 @@ import InputFile from "@/components/InputFile";
 import InputAPI from "@/components/InputAPI";
 import { Data } from "@/components/Data";
 import dynamic from "next/dynamic";
-import { ColorMarkerProps } from "@/components/Map";
+import { ColorMarkerProps, ImageMarkerProps } from "@/components/Map";
+import InputImageFile from "@/components/InputImageFile";
 
 const colors = colormap({
   colormap: 'RdBu',
@@ -27,7 +28,7 @@ function ColorBar(canvas: HTMLCanvasElement, colors: string[], height: number, w
 }
 
 function MapPage() {
-  const [markers, setMarkers] = useState<ColorMarkerProps[]>([]);
+  const [markers, setMarkers] = useState<(ColorMarkerProps | ImageMarkerProps)[]>([]);
   const addData = function (data: Array<Data>) {
     data.map((value, index) => {
       console.log(value);
@@ -49,7 +50,19 @@ function MapPage() {
       } as ColorMarkerProps;
       setMarkers((markers) => [...markers, marker]);  
     });
-  };
+  }
+
+  const addImage = function (data: Array<Data>) {
+    data.map((value, index) => {
+      console.log(value);
+      const marker = {
+        position: [value.lat, value.long],
+        html: value.img,
+        size: 10,
+      } as ImageMarkerProps;
+      setMarkers((markers) => [...markers, marker]);  
+    });
+  }
   const clearData = function () {
     setMarkers([]);
   }
@@ -72,6 +85,7 @@ function MapPage() {
 
   return <main className="container mx-auto">
     <div className="flex flex-col p-2">
+      <InputImageFile onData={addImage} />
       <InputFile onData={addData} />
       <InputAPI onData={addData} />
       <button type="button" className="py-3 px-4 items-center gap-x-2 text-sm font-semibold rounded-lg
