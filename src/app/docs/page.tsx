@@ -25,14 +25,8 @@ function DocsPage() {
       </pre>
       <h4 className="text-lg my-2 pt-2">サンプル</h4>
       <ul className="p-2 list-disc list-inside text-gray-800 dark:bg-gray-800 dark:text-white">
-        <li>1種類のデータ:
-          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample.json">/data/sample.json</a>
-        </li>
-        <li>詳細付きのデータ:
-          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample3.json">/data/sample3.json</a>
-        </li>
-        <li>画像付きのデータ:
-          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample4.json">/data/sample4.json</a>
+        <li>CSVデータ:
+          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample.csv">/data/sample.csv</a>
         </li>
       </ul>
 
@@ -50,8 +44,14 @@ function DocsPage() {
       </pre>
       <h4 className="text-lg my-2 pt-2">サンプル</h4>
       <ul className="p-2 list-disc list-inside text-gray-800 dark:bg-gray-800 dark:text-white">
-        <li>CSVデータ:
-          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample.csv">/data/sample.csv</a>
+        <li>1種類のデータ:
+          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample.json">/data/sample.json</a>
+        </li>
+        <li>詳細付きのデータ:
+          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample3.json">/data/sample3.json</a>
+        </li>
+        <li>画像付きのデータ:
+          <a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="/data/sample4.json">/data/sample4.json</a>
         </li>
       </ul>
     </div>
