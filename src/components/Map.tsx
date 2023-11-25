@@ -41,18 +41,24 @@ const Map = (props: MapProps) => {
     <MapContainer
       center={props.center}
       zoom={props.zoom}
+      minZoom={10}
+      maxZoom={24}
       scrollWheelZoom={true}
       style={{ height: "100%", width: "100%", minHeight: '100px', minWidth: '100px' }}
     >
-      {false ??
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      {null ??
+        <TileLayer className="dark:hidden"
+        maxZoom={24}
+        maxNativeZoom={18}
+        attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
         />}
       {null ??
-        <TileLayer
+        <TileLayer className="hidden dark:block"
+          maxZoom={24}
+          maxNativeZoom={18}
           attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
+          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
         />}
       {props.children}
       <Marker position={[35.454954, 139.6313859]}>

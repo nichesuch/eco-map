@@ -1,8 +1,9 @@
 "use client"
 
 import { useForm, SubmitHandler } from "react-hook-form"
-import Papa from 'papaparse';
-import { Data } from "./Data";
+import Papa, { ParseResult } from 'papaparse';
+import { JSONData } from "./JSONData";
+import { CSVFormat } from "./CSVFormat";
 
 
 type Inputs = {
@@ -31,8 +32,22 @@ function InputFile(props: Props) {
     // Event listener on reader when the file
     // loads, we parse it and set the data.
     reader.onload = async ({ target }) => {
-      const dataList = JSON.parse(target?.result as string) as Array<Data>;
-      props.onData(dataList);
+      try{
+        const dataList = JSON.parse(target?.result as string) as Array<JSONData>;
+        props.onData(dataList);
+      }catch(e){
+        Papa.parse(inputFile, {
+          complete: (results: ParseResult<CSVFormat>) => {
+            console.log(results.data)
+            props.onData(results.data);
+          },
+          header: true,
+          dynamicTyping: true,
+          error: () => {
+            alert('エラーが発生しました')
+          },
+        })
+      }
     };
     reader.readAsText(inputFile);
   }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { Data } from "./Data";
+import { JSONData } from "./JSONData";
 
 type Props = {
   onData: Function
@@ -15,7 +15,7 @@ function InputAPI(props: Props) {
 
     fetch(url).then(async (res) => {
       const json = await res.json();
-      const dataList = json as Array<Data>;
+      const dataList = json as Array<JSONData>;
       props.onData(dataList);
     });
     return false;

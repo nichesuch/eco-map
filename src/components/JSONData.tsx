@@ -1,4 +1,4 @@
-type Data = {
+type JSONData = {
   lat: number;
   long: number;
   type?: string;
@@ -6,4 +6,4 @@ type Data = {
   img?: string;
 }
 
-export type { Data };
+export type { JSONData };

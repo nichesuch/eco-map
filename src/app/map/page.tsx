@@ -4,14 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import colormap from "colormap";
 import InputFile from "@/components/InputFile";
 import InputAPI from "@/components/InputAPI";
-import { Data } from "@/components/Data";
+import { JSONData } from "@/components/JSONData";
 import dynamic from "next/dynamic";
 import { ColorMarkerProps, ImageMarkerProps } from "@/components/Map";
 import InputImageFile from "@/components/InputImageFile";
+import { CSVFormat, isCSV } from "@/components/CSVFormat";
+import CSVDataView from "@/components/CSVDataView";
 
+const STEPS = 255
 const colors = colormap({
   colormap: 'RdBu',
-  nshades: 255,
+  nshades: STEPS,
   format: 'hex',
   alpha: 1
 })
@@ -29,30 +32,42 @@ function ColorBar(canvas: HTMLCanvasElement, colors: string[], height: number, w
 
 function MapPage() {
   const [markers, setMarkers] = useState<(ColorMarkerProps | ImageMarkerProps)[]>([]);
-  const addData = function (data: Array<Data>) {
+  const addData = function (data: Array<JSONData|CSVFormat>) {
     data.map((value, index) => {
-      console.log(value);
-      const marker = {
-        position: [value.lat, value.long],
-        color: value.val ? colors[value.val] : "black",
-        size: 10,
-        popup: (<>
-          {value.img ? (
-            <img src={value.img} alt={JSON.stringify(value.type)}></img>
-          ) : <></>}
-          {value.type ? (
-            <pre>{JSON.stringify(value.type)}</pre>
-          ) : <></>}
-          {value.val ? (
-            <p>{value.val}</p>
-          ) : <></>}
-        </>)
-      } as ColorMarkerProps;
-      setMarkers((markers) => [...markers, marker]);  
+      if(isCSV(value)){
+        if(value.LATITUDE == undefined || value.LONGITUDE == undefined) return;
+        const marker = {
+          position: [value.LATITUDE, value.LONGITUDE],
+          color: value.RISK ? colors[Math.round(value.RISK * ((STEPS - 1) / 5))] : "black",
+          size: 10,
+          popup: (<CSVDataView data={value} colors={colors} colorStep={STEPS} />)
+        } as ColorMarkerProps;
+        setMarkers((markers) => [...markers, marker]);
+      }else{
+        if(value.lat == undefined || value.long == undefined) return;
+        const marker = {
+          position: [value.lat, value.long],
+          color: value.val ? colors[value.val] : "black",
+          size: 10,
+          popup: (<>
+            {value.img ? (
+              <img src={value.img} alt={JSON.stringify(value.type)}></img>
+            ) : <></>}
+            {value.type ? (
+              <pre>{JSON.stringify(value.type)}</pre>
+            ) : <></>}
+            {value.val ? (
+              <p>{value.val}</p>
+            ) : <></>}
+          </>)
+        } as ColorMarkerProps;
+        setMarkers((markers) => [...markers, marker]);  
+      }
+      
     });
   }
 
-  const addImage = function (data: Array<Data>) {
+  const addImage = function (data: Array<JSONData>) {
     data.map((value, index) => {
       console.log(value);
       const marker = {
