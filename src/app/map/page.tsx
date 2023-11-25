@@ -38,7 +38,7 @@ function MapPage() {
         if(value.LATITUDE == undefined || value.LONGITUDE == undefined) return;
         const marker = {
           position: [value.LATITUDE, value.LONGITUDE],
-          color: value.RISK ? colors[Math.round(value.RISK * ((STEPS - 1) / 5))] : "black",
+          color: value.RISK != undefined ? colors[Math.round(value.RISK * ((STEPS - 1) / 5))] : "black",
           size: 10,
           popup: (<CSVDataView data={value} colors={colors} colorStep={STEPS} />)
         } as ColorMarkerProps;
@@ -47,7 +47,7 @@ function MapPage() {
         if(value.lat == undefined || value.long == undefined) return;
         const marker = {
           position: [value.lat, value.long],
-          color: value.val ? colors[value.val] : "black",
+          color: value.val != undefined ? colors[value.val] : "black",
           size: 10,
           popup: (<>
             {value.img ? (
