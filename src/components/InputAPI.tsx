@@ -23,7 +23,7 @@ function InputAPI(props: Props) {
 
   return (
     <div className="sm:flex p-2">
-      <label htmlFor="api-url" className="inline-block w-[200px] text-sm font-medium mr-2 dark:text-white">APIから取得</label>
+      <label htmlFor="api-url" className="mr-2 w-[200px]">APIから取得</label>
       <input ref={urlObj} type="text" id="api-url" name="url" className="w-full py-3 px-4 m-2 inline-block border border-gray-200 rounded-lg text-sm
         focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none
         dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
