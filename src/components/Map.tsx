@@ -1,11 +1,13 @@
 "use client"
 
 import "leaflet/dist/leaflet.css";
-import L, { LatLngExpression, divIcon } from "leaflet";
+import L, { LatLngExpression } from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import ReactDOMServer from "react-dom/server";
 
 //delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -36,9 +38,66 @@ type MapProps = {
 }
 
 const Map = (props: MapProps) => {
+  const mapRef = useRef<L.Map>(null)
+  const markers: (L.CircleMarker | L.Marker)[] = [];
+  
+  const setMarker = () => {
+    props.markers?.map((mark, index) => {
+      if ('color' in mark) {
+        var marker = new L.CircleMarker(
+          mark.position,
+          {
+            radius: 5,
+            fillOpacity: 1.0,
+            stroke: false,
+            color: mark.color,
+          }
+        );
+        if(mark.popup){
+          const str = ReactDOMServer.renderToString(<>{mark.popup}</>)
+          marker.bindPopup(str);
+        }
+        markers.push(marker);
+        if(mapRef?.current){
+          marker.addTo(mapRef.current)
+        }
+      } else if ('html' in mark) {
+        var image = new L.Marker(
+          mark.position,
+          {
+            icon: L.divIcon(
+              {
+                html: mark.html,
+                iconSize: [mark.size ?? 100, mark.size ?? 100],
+                className: "image-marker"
+              }
+            )
+          }
+        );
+        markers.push(image);
+        if(mapRef?.current){
+          image.addTo(mapRef.current)
+        }
+      }
+    })
+  }
+
+  const clearMarker = () => {
+    markers.map((mark)=>{
+      mark.remove()
+    });
+    markers.splice(0);
+  }
+
+  useEffect(() => {
+    clearMarker();
+    setMarker();
+  },[props.markers]);
 
   return (
     <MapContainer
+      ref={mapRef}
+      preferCanvas={true}
       center={props.center}
       zoom={props.zoom}
       minZoom={10}
@@ -66,44 +125,6 @@ const Map = (props: MapProps) => {
           ランドマークタワー
         </Popup>
       </Marker>
-      {props.markers?.map((mark, index) => {
-        if ('color' in mark) {
-          return (
-            <Marker key={"color-marker-" + index} position={mark.position} icon={divIcon({
-              html: `
-                  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="100" fill=${mark.color} /></svg>
-                `,
-              iconSize: [mark.size ?? 10, mark.size ?? 10],
-              className: "color-marker"
-            })}>
-              {
-                mark.popup ? (
-                  <Popup>
-                    {mark.popup!}
-                  </Popup>
-                ) : (<></>)
-              }
-            </Marker>
-          )
-        } else if ('html' in mark) {
-          return (
-            <Marker key={"color-marker-" + index} position={mark.position} icon={divIcon({
-              html: mark.html,
-              iconSize: [mark.size ?? 100, mark.size ?? 100],
-              className: "image-marker"
-            })}>
-              {
-                mark.popup ? (
-                  <Popup>
-                    {mark.popup!}
-                  </Popup>
-                ) : (<></>)
-              }
-            </Marker>
-          )
-        }
-      }
-      )}
     </MapContainer>
   );
 };
