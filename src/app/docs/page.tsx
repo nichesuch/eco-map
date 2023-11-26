@@ -17,10 +17,10 @@ function DocsPage() {
           DT:日時 必須<br/>
           LATITUDE:緯度 必須<br/>
           LONGITUDE:経度 必須<br/>
-          RISK:リスク(1-10) マーカーの色を制御 なければ黒色表示<br/>
-          PM25:PM2.5(1-5)<br/>
-          VOC:揮発性有機化合物(1-5)<br/>
-          CO2:二酸化炭素(1-5)<br/>
+          RESERVE2:リスク(1-10) マーカーの色を制御 なければ黒色表示<br/>
+          PM25:PM2.5(0-700)<br/>
+          S_VOC:揮発性有機化合物(0-320)<br/>
+          CO2:二酸化炭素(0-5000)<br/>
         </div>
       </pre>
       <h4 className="text-lg my-2 pt-2">サンプル</h4>
