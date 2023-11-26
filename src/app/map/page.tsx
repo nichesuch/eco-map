@@ -13,7 +13,7 @@ import CSVDataView from "@/components/CSVDataView";
 
 const STEPS = 255
 const colors = colormap({
-  colormap: 'RdBu',
+  colormap: 'jet',
   nshades: STEPS,
   format: 'hex',
   alpha: 1
@@ -38,7 +38,7 @@ function MapPage() {
         if(value.LATITUDE == undefined || value.LONGITUDE == undefined) return;
         const marker = {
           position: [value.LATITUDE, value.LONGITUDE],
-          color: value.RISK != undefined ? colors[Math.round(value.RISK * ((STEPS - 1) / 5))] : "black",
+          color: value.RISK != undefined ? colors[Math.round(value.RISK * ((STEPS - 1) / 10))] : "black",
           size: 10,
           popup: (<CSVDataView data={value} colors={colors} colorStep={STEPS} />)
         } as ColorMarkerProps;

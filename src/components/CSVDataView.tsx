@@ -26,7 +26,7 @@ const CSVDataView = (props:Props) =>{
               <th scope="col" className="px-6 py-2 text-start text-xs font-medium text-gray-500 uppercase">リスク</th>
               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                 <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium text-white dark:text-white"
-                  style={{backgroundColor:props.colors[Math.round(props.data.RISK * ((props.colorStep - 1) / 5))]}}>
+                  style={{backgroundColor:props.colors[Math.round(props.data.RISK * ((props.colorStep - 1) / 10))]}}>
                   {props.data.RISK}
                 </span>
               </td>
