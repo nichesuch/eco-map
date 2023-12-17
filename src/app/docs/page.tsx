@@ -4,6 +4,8 @@ import React from "react";
 
 function DocsPage() {
   return <main className="container mx-auto">
+    <h2 className="text-2xl my-3">GitHub</h2>
+    <p><a className="px-2 text-gray-800 underline decoration-gray-800 hover:opacity-80 dark:text-white dark:decoration-white" href="https://github.com/Code4Yokohama/eco-map">https://github.com/Code4Yokohama/eco-map</a></p>
     <h2 className="text-2xl my-3">API仕様</h2>
     <p>TODO</p>
     <h2 className="text-2xl my-3 pt-4">ファイル仕様</h2>
