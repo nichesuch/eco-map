@@ -3,9 +3,9 @@ export interface CSVFormat {
     DT: string,
     LATITUDE: number,
     LONGITUDE: number,
-    RESERVE2: number,
+    RISK: number,
     PM25: number,
-    S_VOC: number,
+    VOC: number,
     CO2: number
 }
 
@@ -14,8 +14,8 @@ export const isCSV = (data:any):data is CSVFormat => {
     && "DT" in data
     && "LATITUDE" in data
     && "LONGITUDE" in data
-    && "RESERVE2" in data
+    && "RISK" in data
     && "PM25" in data
-    && "S_VOC" in data
+    && "VOC" in data
     && "CO2" in data;
 }
